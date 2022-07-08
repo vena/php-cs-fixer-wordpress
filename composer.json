@@ -1,0 +1,30 @@
+{
+    "name": "vena/php-cs-fixer-wordpress",
+    "description": "A custom ruleset for PHP CS Fixer (close to) Wordpress Coding Standards",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Vena",
+            "email": "deaconvena@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0.0",
+        "friendsofphp/php-cs-fixer": "^3.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "vena\\WordPress\\PhpCsFixer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+             "Tests\\": "tests/"
+        }
+    }
+}

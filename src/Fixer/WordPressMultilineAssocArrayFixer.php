@@ -73,7 +73,7 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 				continue;
 			}
 
-			$blocks[ ] = array(
+			$blocks[] = array(
 				'type' => $edgeDef,
 				'start' => $blockStart,
 				'end' => $blockEnd,
@@ -81,7 +81,7 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 		}
 
 		foreach ( $blocks as $block ) {
-			$blockAffected = false;
+			$elements = array();
 			for ( $i = $block['end']; $i >= $block['start']; --$i ) {
 				if ( $tokens[ $i ]->getContent() !== ',' ) {
 					continue;
@@ -102,17 +102,24 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 					continue;
 				}
 
-				$blockAffected = true;
-				$tokens->removeTrailingWhitespace( $index );
-				$tokens->ensureWhitespaceAtIndex( $nextPos, 0, "\n" );
+				$elements[] = $i;
 			}
-			if ( $blockAffected ) {
+			if ( count( $elements ) ) {
 				// Find our new block end
 				$block['end'] = $tokens->findBlockEnd( $block['type'], $block['start'] );
 
-				// Ensure newlines at the start and end of the block.
+				// Ensure newline at end of block
 				$tokens->removeLeadingWhitespace( $block['end'] );
 				$tokens->ensureWhitespaceAtIndex( $block['end'], 0, "\n" );
+
+				// Deal with our elements
+				$elements = array_reverse( $elements );
+				foreach ( $elements as $eIndex ) {
+					$tokens->removeTrailingWhitespace( $eIndex );
+					$tokens->ensureWhitespaceAtIndex( $eIndex + 1, 0, "\n" );
+				}
+
+				// Ensure newline at start of block
 				$tokens->removeTrailingWhitespace( $block['start'] );
 				$tokens->ensureWhitespaceAtIndex( $block['start'], 1, "\n" );
 			}

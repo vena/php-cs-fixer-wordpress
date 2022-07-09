@@ -15,7 +15,8 @@ final class WordPressMultilineAssocArrayFixerTest extends AbstractFixerTestCase 
 	public function provideFixCases(): iterable {
 		$shouldNotAlter = array(
 			'single line array' => '<?php $i = [1, 2, 3];',
-			'array with single assoc item' => '<?php $i = [ "testing" => "test" ];'
+			'array with single assoc item' => '<?php $i = [ "testing" => "test" ];',
+			'array with string members' => '<?php $i = [ "test", "testing" ];'
 		);
 
 		foreach ( $shouldNotAlter as $name => $sna ) {

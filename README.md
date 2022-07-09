@@ -18,7 +18,7 @@ I use PHP CS Fixer because I find it easier to integrate into my workflow than P
 require __DIR__ . '/includes.php';
 
 $config = new PhpCsFixer\Config();
-$RuleSet = new vena\WordPress\PhpCsFixer\WordPressSet();
+$RuleSet = new vena\WordPress\PhpCsFixer\WordPressRuleSet();
 
 return $config
 	->registerCustomFixers( $RuleSet->getCustomFixers() )

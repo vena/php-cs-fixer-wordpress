@@ -4,7 +4,7 @@ namespace vena\WordPress\PhpCsFixer;
 
 use PhpCsFixer\RuleSet\AbstractRuleSetDescription;
 
-final class WordPressSet extends AbstractRuleSetDescription {
+final class WordPressRuleSet extends AbstractRuleSetDescription {
 	public function getDescription(): string {
 		return 'Rules that follow the official `Wordpress Coding Standards <https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/>`_.';
 	}
@@ -22,8 +22,8 @@ final class WordPressSet extends AbstractRuleSetDescription {
 			// Built-ins
 			'@PSR2' => true,
 			'@PhpCsFixer' => true,
-			'align_multiline_comment' => array('comment_type' => 'phpdocs_like'),
-			'array_syntax' => array('syntax' => 'long'),
+			'align_multiline_comment' => array( 'comment_type' => 'phpdocs_like' ),
+			'array_syntax' => array( 'syntax' => 'long' ),
 			'binary_operator_spaces' => true,
 			'blank_line_after_opening_tag' => false,
 			'braces' => array(
@@ -37,15 +37,15 @@ final class WordPressSet extends AbstractRuleSetDescription {
 					'property' => 'only_if_meta',
 				),
 			),
-			'class_definition' => array('single_line' => true),
+			'class_definition' => array( 'single_line' => true ),
 			'class_keyword_remove' => true,
-			'concat_space' => array('spacing' => 'one'),
+			'concat_space' => array( 'spacing' => 'one' ),
 			'control_structure_continuation_position' => true,
 			'dir_constant' => true,
 			'fully_qualified_strict_types' => true,
 			'global_namespace_import' => true,
 			'include' => true,
-			'list_syntax' => array('syntax' => 'long'),
+			'list_syntax' => array( 'syntax' => 'long' ),
 			'lowercase_cast' => true,
 			'lowercase_static_reference' => true,
 			'magic_constant_casing' => true,
@@ -55,7 +55,7 @@ final class WordPressSet extends AbstractRuleSetDescription {
 			'native_function_casing' => true,
 			'native_function_type_declaration_casing' => true,
 			'new_with_braces' => true,
-			'no_alternative_syntax' => array('fix_non_monolithic_code' => false),
+			'no_alternative_syntax' => array( 'fix_non_monolithic_code' => false ),
 			'no_blank_lines_after_class_opening' => false,
 			'no_blank_lines_after_phpdoc' => true,
 			'no_empty_comment' => true,
@@ -69,7 +69,7 @@ final class WordPressSet extends AbstractRuleSetDescription {
 					'use',
 				),
 			),
-			'no_spaces_around_offset' => array('positions' => array('outside')),
+			'no_spaces_around_offset' => array( 'positions' => array( 'outside' ) ),
 			'no_spaces_inside_parenthesis' => false,
 			'not_operator_with_space' => true,
 			// 'not_operator_with_successor_space' => true,

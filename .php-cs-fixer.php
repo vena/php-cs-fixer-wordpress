@@ -1,9 +1,9 @@
 <?php
 
-require __DIR__ . '/includes.php';
+require __DIR__ . '/vendor/autoload.php';
 
 $config = new PhpCsFixer\Config();
-$RuleSet = new vena\WordPress\PhpCsFixer\WordPressSet();
+$RuleSet = new vena\WordPress\PhpCsFixer\WordPressRuleSet();
 
 return $config
 	->registerCustomFixers( $RuleSet->getCustomFixers() )

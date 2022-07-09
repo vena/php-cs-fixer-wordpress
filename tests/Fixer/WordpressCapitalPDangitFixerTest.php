@@ -4,9 +4,9 @@ namespace Tests\Fixer;
 
 /**
  * @internal
- * @covers \vena\WordPress\PhpCsFixer\Fixer\WordpressCapitalPDangitFixer
+ * @covers \vena\WordPress\PhpCsFixer\Fixer\WordPressCapitalPDangitFixer
  */
-final class WordpressCapitalPDangitFixerTest extends AbstractFixerTestCase {
+final class WordPressCapitalPDangitFixerTest extends AbstractFixerTestCase {
 	/** @dataProvider provideFixCases */
 	public function testFix( string $expected, ?string $input = null ): void {
 		$this->doTest( $expected, $input );
@@ -19,58 +19,58 @@ final class WordpressCapitalPDangitFixerTest extends AbstractFixerTestCase {
 			'false positive: email' => '<?php echo "bob@wordpress.com";',
 			'false positive: url' => '<?php // https://www.wordpress.com?i=wordpress',
 			'array keys' => '<?php echo $arr["wordpress"];',
-			'html attributes' =>  '<span class="wordpress"></span>',
+			'html attributes' => '<span class="wordpress"></span>',
 		);
 
 		foreach ( $shouldNotAlter as $name => $sna ) {
-			yield sprintf('Must not alter: %s', $name) => array( $sna );
+			yield sprintf( 'Must not alter: %s', $name ) => array( $sna );
 		}
 
 		yield 'Must alter: inside strings' => array(
 			'<?php echo "WordPress";',
-			'<?php echo "wordpress";'
+			'<?php echo "wordpress";',
 		);
 
 		yield 'Must alter: in double-slash comments' => array(
 			'<?php // WordPress',
 			'<?php // wordpress',
 		);
+
 		yield 'Must alter: in slash-star comments' => array(
 			'<?php /* WordPress */',
 			'<?php /* wordpress */',
 		);
 
 		yield 'Must alter: inside HEREDOC' => array(
-<<<FOO
+			<<<'FOO'
 <?php
 echo <<<HEREDOC
 WordPress
-\${variable['wordpress']}
+${variable['wordpress']}
 HEREDOC;
 FOO,
-<<<BAR
+			<<<'BAR'
 <?php
 echo <<<HEREDOC
 wordpress
-\${variable['wordpress']}
+${variable['wordpress']}
 HEREDOC;
 BAR
 		);
 
 		yield 'Must alter: inside NOWDOC' => array(
-<<<FOO
+			<<<'FOO'
 <?php
 echo <<<'NOWDOC'
 WordPress
 NOWDOC;
 FOO,
-<<<BAR
+			<<<'BAR'
 <?php
 echo <<<'NOWDOC'
 wordpress
 NOWDOC;
 BAR
 		);
-
 	}
 }

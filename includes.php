@@ -6,12 +6,12 @@ require_once __DIR__ . '/src/BaseAbstractFixer.php';
 
 require_once __DIR__ . '/src/TokenUtils.php';
 
-require_once __DIR__ . '/src/Fixer/WordpressParenthesesSpacesFixer.php';
+require_once __DIR__ . '/src/Fixer/WordPressParenthesesSpacesFixer.php';
 
-require_once __DIR__ . '/src/Fixer/WordpressArrayIndexSpacesFixer.php';
+require_once __DIR__ . '/src/Fixer/WordPressArrayIndexSpacesFixer.php';
 
-require_once __DIR__ . '/src/Fixer/WordpressMultilineAssocArrayFixer.php';
+require_once __DIR__ . '/src/Fixer/WordPressMultilineAssocArrayFixer.php';
 
 require_once __DIR__ . '/src/Fixer/WordPressCapitalPDangitFixer.php';
 
-require_once __DIR__ . '/src/RuleSet.php';
+require_once __DIR__ . '/src/WordPressRuleSet.php';

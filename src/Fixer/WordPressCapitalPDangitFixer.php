@@ -18,7 +18,7 @@ use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 use vena\WordPress\PhpCsFixer\TokenUtils;
 
-final class WordpressCapitalPDangitFixer extends BaseAbstractFixer {
+final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 	public const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|test|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif|pot))#i';
 	private $strings_and_comments = array();
 
@@ -158,7 +158,7 @@ final class WordpressCapitalPDangitFixer extends BaseAbstractFixer {
 				$match = $match[0];
 			}
 			if ( $match !== 'WordPress' ) {
-				$misspelled[ ] = $match;
+				$misspelled[] = $match;
 			}
 		}
 

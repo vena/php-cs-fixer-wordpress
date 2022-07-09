@@ -16,7 +16,14 @@ final class WordPressMultilineAssocArrayFixerTest extends AbstractFixerTestCase 
 		$shouldNotAlter = array(
 			'single line array' => '<?php $i = [1, 2, 3];',
 			'array with single assoc item' => '<?php $i = [ "testing" => "test" ];',
-			'array with string members' => '<?php $i = [ "test", "testing" ];'
+			'array with string members' => '<?php $i = array( "test", "testing", );',
+			'deep array with string members' => <<<FOO
+			<?php
+			\$i = array(
+				'test' => 'test',
+				'test2' => array( 'deep1', 'deep2', )
+			);
+FOO
 		);
 
 		foreach ( $shouldNotAlter as $name => $sna ) {
@@ -53,6 +60,26 @@ BAR
 FOO,
 <<<BAR
 <?php \$i = [1, 2, 'three' => 'three' ];
+BAR
+		);
+
+		yield 'deep array with multiple items' => array(
+<<<FOO
+<?php
+\$i = array(
+'test' => 'test',
+'test2' => array(
+'deep1' => 'test',
+'deep2' => 'test',
+)
+);
+FOO,
+<<<BAR
+<?php
+\$i = array(
+'test' => 'test',
+'test2' => array( 'deep1' => 'test', 'deep2' => 'test', )
+);
 BAR
 		);
 

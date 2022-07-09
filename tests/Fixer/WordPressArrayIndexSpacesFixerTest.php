@@ -21,6 +21,10 @@ final class WordPressArrayIndexSpacesFixerTest extends AbstractFixerTestCase {
 			'<?php echo $var["test"];',
 		);
 
+		yield 'must not add spaces to push index' => array(
+			'<?php $var[] = 1;',
+		);
+
 		$spaces = array(
 			'$i',
 			'strtoupper($i)',

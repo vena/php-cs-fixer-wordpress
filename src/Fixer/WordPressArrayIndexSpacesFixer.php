@@ -65,6 +65,15 @@ final class WordPressArrayIndexSpacesFixer extends BaseAbstractFixer {
 				continue;
 			}
 
+			$next = $tokens->getNextMeaningfulToken( $index );
+
+			// Empty indexes, array push, should have no space
+			if ( ! $next || $tokens[ $next ]->equals( ']' ) ) {
+				$tokens->removeTrailingWhitespace( $index );
+
+				continue;
+			}
+
 			$blockStart = $index;
 			$blockEnd = $tokens->findBlockEnd( Tokens::BLOCK_TYPE_INDEX_SQUARE_BRACE, $blockStart );
 

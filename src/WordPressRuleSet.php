@@ -96,6 +96,6 @@ final class WordPressRuleSet extends AbstractRuleSetDescription {
 	}
 
 	public function isRisky(): bool {
-		return true;
+		return false;
 	}
 }

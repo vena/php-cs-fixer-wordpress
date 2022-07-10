@@ -15,10 +15,9 @@ use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 
 final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
-
 	private $arrayOpeners = array(
 		\T_ARRAY,
-		CT::T_ARRAY_SQUARE_BRACE_OPEN
+		CT::T_ARRAY_SQUARE_BRACE_OPEN,
 	);
 
 	/** {@inheritDoc} */
@@ -61,7 +60,7 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 				continue;
 			}
 
-			$edges = $this->findBlockEdges($index, $tokens);
+			$edges = $this->findBlockEdges( $index, $tokens );
 
 			// Skip non-associative arrays
 			$isAssoc = count( $tokens->findGivenKind( \T_DOUBLE_ARROW, $edges['start'], $edges['end'] ) );
@@ -74,23 +73,24 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 
 		foreach ( $blocks as $block ) {
 			$elements = array();
-			for ($i = $block['start']; $i <= $block['end']; $i++) {
+			for ( $i = $block['start']; $i <= $block['end']; ++$i ) {
 				// Skip nexted arrays, should be caught by other blocks
 				if (
 					$i > $block['start']
 					&& $tokens[ $i ]->isGivenKind( $this->arrayOpeners )
 				) {
-					$edges = $this->findBlockEdges($i, $tokens);
+					$edges = $this->findBlockEdges( $i, $tokens );
 					$i = $edges['end'];
+
 					continue;
 				}
 
-				if ($tokens[$i]->getContent() !== ',') {
+				if ( $tokens[ $i ]->getContent() !== ',' ) {
 					continue;
 				}
 
 				$nextPos = $i + 1;
-				$nextToken = $tokens[ $nextPos] ?? null;
+				$nextToken = $tokens[ $nextPos ] ?? null;
 				if ( ! $nextToken instanceof Token ) {
 					continue;
 				}
@@ -108,15 +108,12 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 			}
 
 			if ( count( $elements ) ) {
-				// Find our new block end
-				$block['end'] = $tokens->findBlockEnd( $block['type'], $block['start'] );
-
 				// Ensure newline at end of block
 				$tokens->removeLeadingWhitespace( $block['end'] );
 				$tokens->ensureWhitespaceAtIndex( $block['end'], 0, "\n" );
 
 				// Deal with our elements
-				rsort($elements);
+				rsort( $elements );
 				foreach ( $elements as $eIndex ) {
 					$tokens->removeTrailingWhitespace( $eIndex );
 					$tokens->ensureWhitespaceAtIndex( $eIndex + 1, 0, "\n" );
@@ -129,8 +126,8 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 		}
 	}
 
-	private function findBlockEdges(int $index, Tokens $tokens): array {
-		$token = $tokens[$index];
+	private function findBlockEdges( int $index, Tokens $tokens ): array {
+		$token = $tokens[ $index ];
 		$edgeDef = Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE;
 		$blockStart = $index;
 
@@ -141,6 +138,10 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 
 		$blockEnd = $tokens->findBlockEnd( $edgeDef, $blockStart );
 
-		return [ 'type' => $edgeDef, 'start' => $blockStart, 'end' => $blockEnd];
+		return array(
+			'type' => $edgeDef,
+			'start' => $blockStart,
+			'end' => $blockEnd,
+		);
 	}
 }

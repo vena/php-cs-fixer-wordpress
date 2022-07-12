@@ -7,9 +7,11 @@ $RuleSet = new vena\WordPress\PhpCsFixer\WordPressRuleSet();
 
 return $config
 	->registerCustomFixers( $RuleSet->getCustomFixers() )
+	/*
 	->registerCustomFixers( array(
 		new vena\WordPress\PhpCsFixer\Fixer\WordPressCapitalPDangitFixer(),
 	) )
+	*/
 	->setRiskyAllowed( $RuleSet->isRisky() )
 	->setIndent( "\t" )
 	->setRules( array_merge(

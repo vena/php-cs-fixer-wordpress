@@ -13,7 +13,6 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use PhpCsFixer\Tokenizer\TokensAnalyzer;
 use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 use vena\WordPress\PhpCsFixer\TokenUtils;
@@ -72,7 +71,6 @@ final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 
 	/** {@inheritDoc} */
 	public function applyFix( SplFileInfo $file, Tokens $tokens ): void {
-		$tokensAnalyzer = new TokensAnalyzer( $tokens );
 		foreach ( $tokens as $index => $token ) {
 			if (
 				! $token->isGivenKind( $this->strings_and_comments  )

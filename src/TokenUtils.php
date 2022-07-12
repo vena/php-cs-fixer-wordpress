@@ -20,7 +20,7 @@ class TokenUtils {
 	);
 
 	public static function addSpaces( Tokens $tokens, int $start, int $end ) : void {
-		// fix white space before ')'
+		// fix white space before index
 		$endToken = $tokens[ $end - 1 ];
 		if ( $endToken->isWhitespace() ) {
 			if ( ! $endToken->isWhitespace( ' \n' ) && ! $tokens[ $tokens->getPrevNonWhitespace( $end - 1 ) ]->isComment() ) {
@@ -30,7 +30,7 @@ class TokenUtils {
 			$tokens->insertAt( $end, new Token( array( T_WHITESPACE, ' ' ) ) ) ;
 		}
 
-		// fix white space after '('
+		// fix white space after index
 		$startToken = $tokens[ $start + 1 ];
 		if ( $startToken->isWhitespace() ) {
 			if ( ! $startToken->isWhitespace( ' \n' ) && ! $tokens[ $tokens->getNextNonWhitespace( $start + 1 ) ]->isComment() ) {

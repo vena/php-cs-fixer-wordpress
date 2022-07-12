@@ -45,15 +45,15 @@ return $config
 
 ## Custom Fixers
 
-### WordpressParenthesesSpacesFixer
+### WordPressParenthesesSpacesFixer
 
 With few exceptions, WPCS specifies spaces after opening and before closing parenthesis.
 
-### WordpressArrayIndexSpacesFixer
+### WordPressArrayIndexSpacesFixer
 
 If a variable is used as an array key, it must be flanked by spaces. All other keys should not have spaces.
 
-### WordPressMultilineAssocArayFixer
+### WordPressMultilineAssocArrayFixer
 
 For any array which contains multiple items and any associative key, each item must appear on a new line. NOTE: This fixer DOES NOT fix indentation, and should be used with the `array_indentation` rule.
 

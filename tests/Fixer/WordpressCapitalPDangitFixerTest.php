@@ -4,6 +4,7 @@ namespace Tests\Fixer;
 
 /**
  * @internal
+ *
  * @covers \vena\WordPress\PhpCsFixer\Fixer\WordPressCapitalPDangitFixer
  */
 final class WordPressCapitalPDangitFixerTest extends AbstractFixerTestCase {
@@ -14,12 +15,12 @@ final class WordPressCapitalPDangitFixerTest extends AbstractFixerTestCase {
 
 	public function provideFixCases(): iterable {
 		$shouldNotAlter = array(
-			'function name' => '<?php function testing_wordpress() {}',
-			'function property' => '<?php function testing( $wordpress) {}',
+			'function name'         => '<?php function testing_wordpress() {}',
+			'function property'     => '<?php function testing( $wordpress) {}',
 			'false positive: email' => '<?php echo "bob@wordpress.com";',
-			'false positive: url' => '<?php // https://www.wordpress.com?i=wordpress',
-			'array keys' => '<?php echo $arr["wordpress"];',
-			'html attributes' => '<span class="wordpress"></span>',
+			'false positive: url'   => '<?php // https://www.wordpress.com?i=wordpress',
+			'array keys'            => '<?php echo $arr["wordpress"];',
+			'html attributes'       => '<span class="wordpress"></span>',
 		);
 
 		foreach ( $shouldNotAlter as $name => $sna ) {

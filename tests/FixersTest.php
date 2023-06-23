@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare( strict_types = 1 );
 
 /*
  * This file is part of PHP CS Fixer: custom fixers.
@@ -26,7 +27,7 @@ final class FixersTest extends TestCase {
 		$fixerNames = $this->fixerNamesFromCollection();
 
 		$sortedFixerNames = $fixerNames;
-		\sort( $sortedFixerNames );
+		sort( $sortedFixerNames );
 
 		self::assertSame( $sortedFixerNames, $fixerNames );
 	}
@@ -46,14 +47,13 @@ final class FixersTest extends TestCase {
 			->files()
 			->in( __DIR__ . '/../src/Fixer/' )
 			->notName( 'Abstract*Fixer.php' )
-			->notName( 'DeprecatingFixerInterface.php' )
-		;
+			->notName( 'DeprecatingFixerInterface.php' );
 
 		foreach ( $finder as $file ) {
 			$className = 'vena\\WordPress\\PhpCsFixer\\Fixer\\' . $file->getBasename( '.php' );
 
 			$fixer = new $className();
-			\assert( $fixer instanceof FixerInterface );
+			assert( $fixer instanceof FixerInterface );
 
 			yield $className => array( $fixer );
 		}
@@ -63,9 +63,9 @@ final class FixersTest extends TestCase {
 	 * @return array<string>
 	 */
 	private function fixerNamesFromCollection(): array {
-		return \array_map(
+		return array_map(
 			static fn ( FixerInterface $fixer ): string => $fixer->getName(),
-			\iterator_to_array( new Fixers() )
+			iterator_to_array( new Fixers() )
 		);
 	}
 }

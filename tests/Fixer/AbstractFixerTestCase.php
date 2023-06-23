@@ -1,5 +1,6 @@
 <?php
-declare( strict_types=1 );
+
+declare( strict_types = 1 );
 
 /**
  * This file contains work sourced under MIT license from:
@@ -10,8 +11,6 @@ declare( strict_types=1 );
 
 namespace Tests\Fixer;
 
-use Exception;
-use InvalidArgumentException;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\FixerInterface;
@@ -24,8 +23,6 @@ use PhpCsFixer\StdinFileInfo;
 use PhpCsFixer\Tokenizer\Tokens;
 use PhpCsFixer\WhitespacesFixerConfig;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionMethod;
 use Tests\AssertRegExpTrait;
 use Tests\AssertSameTokensTrait;
 
@@ -39,13 +36,17 @@ abstract class AbstractFixerTestCase extends TestCase {
 	/** @var FixerInterface|AbstractFixer */
 	protected $fixer;
 
-	final protected function setUp(): void {
-		$reflectionClass = new ReflectionClass( static::class );
+	protected $allowedFixersWithoutDefaultCodeSample;
 
-		$className = '\\vena\\WordPress\\PhpCsFixer\\Fixer\\' . \substr( $reflectionClass->getShortName(), 0, -4 );
+	protected $allowedRequiredOptions;
+
+	final protected function setUp(): void {
+		$reflectionClass = new \ReflectionClass( static::class );
+
+		$className = '\\vena\\WordPress\\PhpCsFixer\\Fixer\\' . mb_substr( $reflectionClass->getShortName(), 0, -4 );
 
 		$fixer = new $className();
-		\assert( $fixer instanceof FixerInterface, 'Fixer must implement FixerInterface' );
+		assert( $fixer instanceof FixerInterface, 'Fixer must implement FixerInterface' );
 
 		$this->fixer = $fixer;
 		if ( $this->fixer instanceof WhitespacesAwareFixerInterface ) {
@@ -60,19 +61,19 @@ abstract class AbstractFixerTestCase extends TestCase {
 			static::assertNull( $this->fixer->getDefinition()->getRiskyDescription(), sprintf( '[%s] Fixer is not risky so no description of it expected.', $this->fixer->getName() ) );
 		}
 
-		$reflection = new ReflectionMethod( $this->fixer, 'isRisky' );
+		$reflection = new \ReflectionMethod( $this->fixer, 'isRisky' );
 
 		// If fixer is not risky then the method `isRisky` from `AbstractFixer` must be used
 		static::assertSame(
 			! $this->fixer->isRisky(),
-			$reflection->getDeclaringClass()->getName() === 'PhpCsFixer\AbstractFixer',
+			'PhpCsFixer\AbstractFixer' === $reflection->getDeclaringClass()->getName(),
 			'A fixer which is not risky must not override the method `isRisky` from `AbstractFixer`.'
 		);
 	}
 
 	final public function testFixerDefinitions(): void {
-		$fixerName = $this->fixer->getName();
-		$definition = $this->fixer->getDefinition();
+		$fixerName           = $this->fixer->getName();
+		$definition          = $this->fixer->getDefinition();
 		$fixerIsConfigurable = $this->fixer instanceof ConfigurableFixerInterface;
 
 		self::assertValidDescription( $fixerName, 'summary', $definition->getSummary() );
@@ -81,7 +82,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 		static::assertNotEmpty( $samples, sprintf( '[%s] Code samples are required.', $fixerName ) );
 
 		$configSamplesProvided = array();
-		$dummyFileInfo = new StdinFileInfo();
+		$dummyFileInfo         = new StdinFileInfo();
 
 		foreach ( $samples as $sampleCounter => $sample ) {
 			static::assertInstanceOf( 'PhpCsFixer\FixerDefinition\CodeSampleInterface', $sample, sprintf( '[%s] Sample #%d', $fixerName, $sampleCounter ) );
@@ -97,7 +98,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 
 			$config = $sample->getConfiguration();
 
-			if ( $config !== null ) {
+			if ( null !== $config ) {
 				static::assertTrue( $fixerIsConfigurable, sprintf( '[%s] Sample #%d has configuration, but the fixer is not configurable.', $fixerName, $sampleCounter ) );
 
 				$configSamplesProvided[ $sampleCounter ] = $config;
@@ -129,7 +130,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 
 			$duplicatedCodeSample = array_search(
 				$sample,
-				\array_slice( $samples, 0, $sampleCounter ),
+				array_slice( $samples, 0, $sampleCounter ),
 				false
 			);
 
@@ -147,7 +148,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 				static::assertArrayHasKey( $fixerName, $this->allowedRequiredOptions, sprintf( '[%s] Has no sample for default configuration.', $fixerName ) );
 			}
 
-			if ( \count( $configSamplesProvided ) < 2 ) {
+			if ( count( $configSamplesProvided ) < 2 ) {
 				static::fail( sprintf( '[%s] Configurable fixer only provides a default configuration sample and none for its configuration options.', $fixerName ) );
 			}
 
@@ -162,7 +163,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 	}
 
 	final public function testFixersAreFinal(): void {
-		$reflection = new ReflectionClass( $this->fixer );
+		$reflection = new \ReflectionClass( $this->fixer );
 
 		static::assertTrue(
 			$reflection->isFinal(),
@@ -230,7 +231,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 		}
 
 		if ( $expected === $input ) {
-			throw new InvalidArgumentException( 'Expected must be different to input.' );
+			throw new \InvalidArgumentException( 'Expected must be different to input.' );
 		}
 
 		self::assertNull( $this->lintSource( $expected ) );
@@ -238,7 +239,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 		Tokens::clearCache();
 		$expectedTokens = Tokens::fromCode( $expected );
 
-		if ( $input !== null ) {
+		if ( null !== $input ) {
 			Tokens::clearCache();
 			$inputTokens = Tokens::fromCode( $input );
 
@@ -250,7 +251,7 @@ abstract class AbstractFixerTestCase extends TestCase {
 			self::assertSame(
 				$expected,
 				$actual = $inputTokens->generateCode(),
-				\sprintf(
+				sprintf(
 					"Expected code:\n```\n%s\n```\nGot:\n```\n%s\n```\n",
 					$expected,
 					$actual
@@ -270,14 +271,14 @@ abstract class AbstractFixerTestCase extends TestCase {
 	final protected function lintSource( string $source ): ?string {
 		static $linter;
 
-		if ( $linter === null ) {
+		if ( null === $linter ) {
 			$linter = new Linter();
 		}
 
 		try {
 			$linter->lintSource( $source )->check();
-		} catch ( Exception $exception ) {
-			return \sprintf( 'Linting "%s" failed with error: %s.', $source, $exception->getMessage() );
+		} catch ( \Exception $exception ) {
+			return sprintf( 'Linting "%s" failed with error: %s.', $source, $exception->getMessage() );
 		}
 
 		return null;
@@ -288,10 +289,10 @@ abstract class AbstractFixerTestCase extends TestCase {
 		static::assertStringNotContainsString( 'phpdocs', $description, sprintf( '[%s] `PHPDoc` must not be in the plural in %s.', $fixerName, $descriptionType ) );
 		static::assertCorrectCasing( $description, 'PHPDoc', sprintf( '[%s] `PHPDoc` must be in correct casing in %s.', $fixerName, $descriptionType ) );
 		static::assertCorrectCasing( $description, 'PHPUnit', sprintf( '[%s] `PHPUnit` must be in correct casing in %s.', $fixerName, $descriptionType ) );
-		static::assertFalse( strpos( $descriptionType, '``' ), sprintf( '[%s] The %s must no contain sequential backticks.', $fixerName, $descriptionType ) );
+		static::assertFalse( mb_strpos( $descriptionType, '``' ), sprintf( '[%s] The %s must no contain sequential backticks.', $fixerName, $descriptionType ) );
 	}
 
 	private static function assertCorrectCasing( string $needle, string $haystack, string $message ): void {
-		static::assertSame( substr_count( strtolower( $haystack ), strtolower( $needle ) ), substr_count( $haystack, $needle ), $message );
+		static::assertSame( mb_substr_count( mb_strtolower( $haystack ), mb_strtolower( $needle ) ), mb_substr_count( $haystack, $needle ), $message );
 	}
 }

@@ -26,5 +26,10 @@
         "psr-4": {
              "Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": [
+            "phpunit --configuration phpunit.xml --testsuite all --testdox"
+        ]
     }
 }

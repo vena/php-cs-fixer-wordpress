@@ -4,6 +4,7 @@ namespace Tests\Fixer;
 
 /**
  * @internal
+ *
  * @covers \vena\WordPress\PhpCsFixer\Fixer\WordPressArrayIndexSpacesFixer
  */
 final class WordPressArrayIndexSpacesFixerTest extends AbstractFixerTestCase {

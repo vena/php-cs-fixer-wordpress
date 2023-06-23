@@ -4,6 +4,7 @@ namespace Tests\Fixer;
 
 /**
  * @internal
+ *
  * @covers \vena\WordPress\PhpCsFixer\Fixer\WordPressParenthesesSpacesFixer
  */
 final class WordPressParenthesesSpacesFixerTest extends AbstractFixerTestCase {
@@ -14,7 +15,7 @@ final class WordPressParenthesesSpacesFixerTest extends AbstractFixerTestCase {
 
 	public function provideFixCases(): iterable {
 		$shouldNotAlter = array(
-			'casts' => '<?php (string) $i;',
+			'casts'                       => '<?php (string) $i;',
 			'casts in control structures' => '<?php foreach ( (array) $bar as $foo ) {}',
 		);
 

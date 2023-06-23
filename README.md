@@ -64,5 +64,7 @@ Attempts to automatically correct common misspellings of WordPress in strings an
 ## Credits
 
 [PHP CS Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)
+
 [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards).
+
 Test scaffolding is built on the work of Kuba Werłos' [PHP CS Fixer: custom fixers](https://github.com/kubawerlos/php-cs-fixer-custom-fixers/)

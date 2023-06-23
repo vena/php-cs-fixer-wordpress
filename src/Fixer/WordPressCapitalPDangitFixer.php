@@ -13,12 +13,12 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 use vena\WordPress\PhpCsFixer\TokenUtils;
 
 final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 	public const WP_REGEX = '#(?<![\\\\/\$@`-])\b(Word[ _-]*Pres+)\b(?![@/`-]|\.(?:org|com|net|test|tv)|[^\s<>\'"()]*?\.(?:php|js|css|png|j[e]?pg|gif|pot))#i';
+
 	private $strings_and_comments = array();
 
 	public function __construct() {
@@ -70,7 +70,7 @@ final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 	}
 
 	/** {@inheritDoc} */
-	public function applyFix( SplFileInfo $file, Tokens $tokens ): void {
+	public function applyFix( \SplFileInfo $file, Tokens $tokens ): void {
 		foreach ( $tokens as $index => $token ) {
 			if (
 				! $token->isGivenKind( $this->strings_and_comments  )
@@ -109,18 +109,18 @@ final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 			// Prevent false positives
 			$offset = 0;
 			foreach ( $matches[1] as $key => $match_data ) {
-				$next_offset = ( $match_data[1] + strlen( $match_data[0] ) );
+				$next_offset = ( $match_data[1] + mb_strlen( $match_data[0] ) );
 
 				// Prevent matches on part of a URL
-				if ( preg_match( '`http[s]?://[^\s<>\'"()]*' . preg_quote( $match_data[0], '`' ) . '`', $content, $discard, 0, $offset ) === 1 ) {
+				if ( 1 === preg_match( '`http[s]?://[^\s<>\'"()]*' . preg_quote( $match_data[0], '`' ) . '`', $content, $discard, 0, $offset ) ) {
 					unset( $matches[1][ $key ] );
-				} elseif ( preg_match( '`[a-z]+=(["\'])' . preg_quote( $match_data[0], '`' ) . '\1`', $content, $discard, 0, $offset ) === 1 ) {
+				} elseif ( 1 === preg_match( '`[a-z]+=(["\'])' . preg_quote( $match_data[0], '`' ) . '\1`', $content, $discard, 0, $offset ) ) {
 					// Prevent matches on html attributes like: `value="wordpress"`.
 					unset( $matches[1][ $key ] );
-				} elseif ( preg_match( '`\\\\\'' . preg_quote( $match_data[0], '`' ) . '\\\\\'`', $content, $discard, 0, $offset ) === 1 ) {
+				} elseif ( 1 === preg_match( '`\\\\\'' . preg_quote( $match_data[0], '`' ) . '\\\\\'`', $content, $discard, 0, $offset ) ) {
 					// Prevent matches on xpath queries and such: `\'wordpress\'`.
 					unset( $matches[1][ $key ] );
-				} elseif ( preg_match( '`(?:\?|&amp;|&)[a-z0-9_]+=' . preg_quote( $match_data[0], '`' ) . '(?:&|$)`', $content, $discard, 0, $offset ) === 1 ) {
+				} elseif ( 1 === preg_match( '`(?:\?|&amp;|&)[a-z0-9_]+=' . preg_quote( $match_data[0], '`' ) . '(?:&|$)`', $content, $discard, 0, $offset ) ) {
 					// Prevent matches on url query strings: `?something=wordpress`.
 					unset( $matches[1][ $key ] );
 				}
@@ -140,10 +140,10 @@ final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 
 			$replacement = $content;
 			foreach ( $matches[1] as $match ) {
-				$replacement = substr_replace( $replacement, 'WordPress', $match[1], strlen( $match[0] ) );
+				$replacement = substr_replace( $replacement, 'WordPress', $match[1], mb_strlen( $match[0] ) );
 			}
 
-			$newToken = $token->getPrototype();
+			$newToken    = $token->getPrototype();
 			$newToken[1] = $replacement;
 			$tokens->overrideRange( $index, $index, array( new Token( $newToken ) ) );
 		}
@@ -155,7 +155,7 @@ final class WordPressCapitalPDangitFixer extends BaseAbstractFixer {
 			if ( is_array( $match ) ) {
 				$match = $match[0];
 			}
-			if ( $match !== 'WordPress' ) {
+			if ( 'WordPress' !== $match ) {
 				$misspelled[] = $match;
 			}
 		}

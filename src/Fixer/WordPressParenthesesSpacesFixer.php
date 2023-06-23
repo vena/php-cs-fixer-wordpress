@@ -10,7 +10,6 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Tokens;
-use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 use vena\WordPress\PhpCsFixer\TokenUtils;
 
@@ -57,7 +56,7 @@ final class WordPressParenthesesSpacesFixer extends BaseAbstractFixer {
 	}
 
 	/** {@inheritDoc} */
-	public function applyFix( SplFileInfo $file, Tokens $tokens ): void {
+	public function applyFix( \SplFileInfo $file, Tokens $tokens ): void {
 		foreach ( $tokens as $index => $token ) {
 			if ( ! $token->equalsAny( array( '(', ')' ) ) || $token->isComment() ) {
 				continue;
@@ -71,7 +70,7 @@ final class WordPressParenthesesSpacesFixer extends BaseAbstractFixer {
 			$blockEnd = $tokens->findBlockEnd( Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $blockStart );
 
 			$contents = TokenUtils::getBlockContent( $blockStart, $blockEnd, $tokens );
-			$owner = $tokens->getPrevMeaningfulToken( $blockStart );
+			$owner    = $tokens->getPrevMeaningfulToken( $blockStart );
 
 			if ( ! $owner ) {
 				continue;
@@ -85,7 +84,7 @@ final class WordPressParenthesesSpacesFixer extends BaseAbstractFixer {
 			}
 
 			// Parentheses must have non-whitespace content to act
-			if ( count( $contents ) === 0 || strlen( trim( join( $contents ) ) ) < 1 ) {
+			if ( 0 === count( $contents ) || mb_strlen( trim( join( $contents ) ) ) < 1 ) {
 				// Remove any possible whitespace between empties
 				$tokens->removeTrailingWhitespace( $blockStart );
 

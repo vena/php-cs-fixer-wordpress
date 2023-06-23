@@ -11,7 +11,6 @@ use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 
 final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
@@ -52,9 +51,9 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 	}
 
 	/** {@inheritDoc} */
-	public function applyFix( SplFileInfo $file, Tokens $tokens ): void {
+	public function applyFix( \SplFileInfo $file, Tokens $tokens ): void {
 		$reverseTokens = array_reverse( $tokens->toArray(), true );
-		$blocks = array();
+		$blocks        = array();
 		foreach ( $reverseTokens as $index => $token ) {
 			if ( ! $token->isGivenKind( $this->arrayOpeners ) ) {
 				continue;
@@ -80,27 +79,27 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 					&& $tokens[ $i ]->isGivenKind( $this->arrayOpeners )
 				) {
 					$edges = $this->findBlockEdges( $i, $tokens );
-					$i = $edges['end'];
+					$i     = $edges['end'];
 
 					continue;
 				}
 
-				if ( $tokens[ $i ]->getContent() !== ',' ) {
+				if ( ',' !== $tokens[ $i ]->getContent() ) {
 					continue;
 				}
 
-				$nextPos = $i + 1;
+				$nextPos   = $i + 1;
 				$nextToken = $tokens[ $nextPos ] ?? null;
 				if ( ! $nextToken instanceof Token ) {
 					continue;
 				}
 
-				if ( \str_contains( $nextToken->getContent(), "\n" ) ) {
+				if ( str_contains( $nextToken->getContent(), "\n" ) ) {
 					continue;
 				}
 
 				$sibling = $tokens->getNonWhitespaceSibling( $i, 1, " \t\r\0\x0B" );
-				if ( $sibling !== null && $tokens[ $sibling ]->isGivenKind( \T_COMMENT ) ) {
+				if ( null !== $sibling && $tokens[ $sibling ]->isGivenKind( \T_COMMENT ) ) {
 					continue;
 				}
 
@@ -127,21 +126,21 @@ final class WordPressMultilineAssocArrayFixer extends BaseAbstractFixer {
 	}
 
 	private function findBlockEdges( int $index, Tokens $tokens ): array {
-		$token = $tokens[ $index ];
-		$edgeDef = Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE;
+		$token      = $tokens[ $index ];
+		$edgeDef    = Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE;
 		$blockStart = $index;
 
 		if ( $token->isGivenKind( \T_ARRAY ) ) {
-			$edgeDef = Tokens::BLOCK_TYPE_PARENTHESIS_BRACE;
+			$edgeDef    = Tokens::BLOCK_TYPE_PARENTHESIS_BRACE;
 			$blockStart = $tokens->getNextMeaningfulToken( $index );
 		}
 
 		$blockEnd = $tokens->findBlockEnd( $edgeDef, $blockStart );
 
 		return array(
-			'type' => $edgeDef,
+			'type'  => $edgeDef,
 			'start' => $blockStart,
-			'end' => $blockEnd,
+			'end'   => $blockEnd,
 		);
 	}
 }

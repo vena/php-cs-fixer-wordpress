@@ -9,7 +9,6 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Tokens;
-use SplFileInfo;
 use vena\WordPress\PhpCsFixer\BaseAbstractFixer;
 use vena\WordPress\PhpCsFixer\TokenUtils;
 
@@ -52,7 +51,7 @@ final class WordPressArrayIndexSpacesFixer extends BaseAbstractFixer {
 	}
 
 	/** {@inheritDoc} */
-	public function applyFix( SplFileInfo $file, Tokens $tokens ): void {
+	public function applyFix( \SplFileInfo $file, Tokens $tokens ): void {
 		foreach ( $tokens as $index => $token ) {
 			if ( ! $token->equals( '[' ) ) {
 				continue;
@@ -75,7 +74,7 @@ final class WordPressArrayIndexSpacesFixer extends BaseAbstractFixer {
 			}
 
 			$blockStart = $index;
-			$blockEnd = $tokens->findBlockEnd( Tokens::BLOCK_TYPE_INDEX_SQUARE_BRACE, $blockStart );
+			$blockEnd   = $tokens->findBlockEnd( Tokens::BLOCK_TYPE_INDEX_SQUARE_BRACE, $blockStart );
 
 			$content = $tokens->findGivenKind(
 				$this->safeContent,

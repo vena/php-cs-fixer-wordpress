@@ -377,12 +377,6 @@ final class WordPressRuleSet extends AbstractRuleSetDescription {
 			'visibility_required' => true,
 			// In array declaration, there MUST be a whitespace after each comma.
 			'whitespace_after_comma_in_array' => array( 'ensure_single_space' => true ),
-			// Write conditions in Yoda style (`true`), non-Yoda style (`['equal' => false, 'identical' => false, 'less_and_greater' => false]`) or ignore those conditions (`null`) based on configuration.
-			'yoda_style' => array(
-				'equal'            => true,
-				'identical'        => true,
-				'less_and_greater' => null,
-			),
 
 			// Custom
 			'Vena/wp_parentheses_spaces'     => true,
